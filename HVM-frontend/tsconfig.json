@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "es2016",                     /* Specify ECMAScript target version. */
+    "module": "commonjs",                   /* Specify module code generation. */
+    "jsx": "react-jsx",                     /* Specify JSX code generation. */
+    "strict": true,                         /* Enable all strict type-checking options. */
+    "esModuleInterop": true,                /* Enable emit interoperability between CommonJS and ES Modules. */
+    "skipLibCheck": true,                   /* Skip type checking of all declaration files. */
+    "forceConsistentCasingInFileNames": true, /* Disallow inconsistently-cased references. */
+    "baseUrl": "./",                        /* Base directory to resolve non-relative module names. */
+    "paths": {                              /* Path mapping for module resolution. */
+      "*": ["node_modules/*", "src/types/*"]
+    },
+    "resolveJsonModule": true,              /* Enable importing JSON modules. */
+    "noEmit": true                          /* Disable emitting files from a compilation. */
+  },
+  "include": ["src/**/*", "src/types/passTypes.ts"],                   /* Include all files in the src directory. */
+  "exclude": ["node_modules", "**/*.spec.ts"] /* Exclude node_modules and test files. */
+}

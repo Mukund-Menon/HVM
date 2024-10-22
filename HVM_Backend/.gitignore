@@ -1,0 +1,5 @@
+backend/__pycache__/
+hvm/__pycache__/
+db.sqlite3
+hvm/migrations/
+test

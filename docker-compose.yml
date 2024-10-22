@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./HVM_Backend
+    volumes:
+      - ./HVM_Backend:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DJANGO_SUPERUSER_USERNAME=admin
+      - DJANGO_SUPERUSER_PASSWORD=admin
+      - DJANGO_SUPERUSER_EMAIL=admin@example.com
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./HVM-frontend
+    volumes:
+      - ./HVM-frontend:/app
+    expose:
+      - "3000"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - backend
+
+  nginx:
+    image: nginx:alpine
+    volumes:
+      - ./HVM-frontend/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./HVM-frontend/build:/usr/share/nginx/html
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - backend
+
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
