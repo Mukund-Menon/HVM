@@ -154,6 +154,8 @@ class LogoutView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 class ExpiryView(APIView):
+    permission_classes = [AllowAny]
+    authentication_classes = []
 
     @csrf_exempt
     def get(self, request, *args, **kwargs):
