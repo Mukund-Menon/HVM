@@ -12,30 +12,14 @@ services:
       - DJANGO_SUPERUSER_USERNAME=admin
       - DJANGO_SUPERUSER_PASSWORD=admin
       - DJANGO_SUPERUSER_EMAIL=admin@example.com
-    depends_on:
-      - db
 
   frontend:
     build:
       context: ./HVM-frontend
-    volumes:
-      - ./HVM-frontend:/app
     ports:
-      - "3000:3000"  # Maps container's port 3000 to host's port 3000
+      - "3000:3000" 
     environment:
       - NODE_ENV=production
       - REACT_APP_API_URL=http://localhost:8000/api
     depends_on:
       - backend
-
-  db:
-    image: postgres:13
-    environment:
-      POSTGRES_DB: mydatabase
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
-volumes:
-  postgres_data:
