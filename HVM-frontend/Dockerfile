@@ -17,15 +17,18 @@ COPY . .
 # Build the React app
 RUN npm run build
 
-# Step 2: Serve the built app with NGINX
-# Use an official NGINX image as the base for the production deployment
-FROM nginx:alpine
+# Step 2: Use a lightweight Node server to serve the built app
+# Start from a lightweight Node image
+FROM node:alpine
 
-# Copy the build folder from the previous stage to NGINX's HTML folder
-COPY --from=build /app/build /usr/share/nginx/html
+# Install a static file server (like "serve") globally
+RUN npm install -g serve
 
-# Expose port 80 to allow traffic
-EXPOSE 80
+# Copy the build folder from the previous stage
+COPY --from=build /app/build /app/build
 
-# Start NGINX server
-CMD ["nginx", "-g", "daemon off;"]
+# Expose port 3000 to allow traffic
+EXPOSE 3000
+
+# Serve the application with the "serve" command
+CMD ["serve", "-s", "/app/build", "-l", "3000"]

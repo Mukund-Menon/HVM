@@ -20,22 +20,12 @@ services:
       context: ./HVM-frontend
     volumes:
       - ./HVM-frontend:/app
-    expose:
-      - "3000"
+    ports:
+      - "3000:3000"  # Maps container's port 3000 to host's port 3000
     environment:
       - NODE_ENV=production
+      - REACT_APP_API_URL=http://localhost:8000/api
     depends_on:
-      - backend
-
-  nginx:
-    image: nginx:alpine
-    volumes:
-      - ./HVM-frontend/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
-      - ./HVM-frontend/build:/usr/share/nginx/html
-    ports:
-      - "80:80"
-    depends_on:
-      - frontend
       - backend
 
   db:
