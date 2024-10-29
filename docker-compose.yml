@@ -7,7 +7,6 @@ services:
       context: ./HVM_Backend
       dockerfile: Dockerfile
     volumes:
-      - ./HVM_Backend:/app
       - backend_static:/app/static
       - sqlite_data:/app/db
     ports:
