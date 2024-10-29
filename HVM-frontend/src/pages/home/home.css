@@ -1,0 +1,10 @@
+.MuiPickersDay-root.Mui-selected {
+    background-color: orange !important;
+  }
+  .MuiPickersDay-root.Mui-selected:hover {
+    background-color: orange !important;
+  }
+  .MuiOutlinedInput-root {
+    border-radius: 24px !important;
+    height: 48px !important;
+  }
