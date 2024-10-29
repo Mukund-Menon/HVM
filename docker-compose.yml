@@ -1,25 +1,52 @@
+# docker-compose.yml
 version: '3.8'
 
 services:
   backend:
     build:
       context: ./HVM_Backend
+      dockerfile: Dockerfile
     volumes:
       - ./HVM_Backend:/app
+      - backend_static:/app/static
+      - sqlite_data:/app/db
     ports:
       - "8000:8000"
     environment:
       - DJANGO_SUPERUSER_USERNAME=admin
       - DJANGO_SUPERUSER_PASSWORD=admin
       - DJANGO_SUPERUSER_EMAIL=admin@example.com
+      - SECRET_KEY=django-insecure-z#blp2ycxz*#5sk$8g8l-8)#0^k2jnprx!0f#%@y_wu6utkl)@
+      - DEBUG=1
+      - ALLOWED_HOSTS=localhost,127.0.0.1
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/admin/')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - hvm_network
 
   frontend:
     build:
       context: ./HVM-frontend
+      dockerfile: Dockerfile
     ports:
-      - "3000:3000" 
+      - "3000:3000"
     environment:
       - NODE_ENV=production
       - REACT_APP_API_URL=http://localhost:8000/api
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
+    networks:
+      - hvm_network
+
+networks:
+  hvm_network:
+    driver: bridge
+
+volumes:
+  backend_static:
+  sqlite_data:
