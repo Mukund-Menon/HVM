@@ -11,6 +11,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Visitor } from "visitorTypes";
+import "./home.css";
 
 const ITEMS_PER_PAGE = 15;
 const API = process.env.REACT_APP_API_URL
@@ -144,24 +145,6 @@ export default function Home() {
     );
   };
 
-  const datePickerStyles = `
-  .css-1u23akw-MuiButtonBase-root-MuiPickersDay-root.Mui-selected{
-    background-color: orange !important;
-  }
-  .css-jgls56-MuiButtonBase-root-MuiPickersDay-root.Mui-selected {
-    background-color: orange !important;
-  }
-  .css-1u23akw-MuiButtonBase-root-MuiPickersDay-root.Mui-selected:hover{
-    background-color: orange !important;
-  }
-  .css-jgls56-MuiButtonBase-root-MuiPickersDay-root.Mui-selected:hover {
-    background-color: orange !important;
-  }
-  .css-o9k5xi-MuiInputBase-root-MuiOutlinedInput-root{
-    border-radius: 24px !important;
-    height: 48px !important;
-  }
-`;
 
   return (
     <div>
@@ -176,7 +159,6 @@ export default function Home() {
             <p className="font-Heading font-semibold text-xl">
               Namah Shivaya, {currentUser}
             </p>
-            <style>{datePickerStyles}</style>
             <div className="flex justify-between items-center">
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
