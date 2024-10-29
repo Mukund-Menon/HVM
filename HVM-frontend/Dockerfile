@@ -1,34 +1,33 @@
+# HVM-frontend/Dockerfile
+FROM node:18-alpine as builder
 
-FROM node:22.10.0 AS build
-
-# Set the working directory inside the container
 WORKDIR /app
 
-# Copy the package.json and package-lock.json (or yarn.lock) to the working directory
+# Copy package files
 COPY package*.json ./
 
-# Install dependencies with legacy peer dependencies
+# Install dependencies
 RUN npm install --legacy-peer-deps
 
-# Copy the rest of the application to the container
+# Copy source files and .env
 COPY . .
 
-# Build the React app
-RUN npm run build && ls -la /app/build
-# Step 2: Use a lightweight Node server to serve the built app
-# Start from a lightweight Node image
-FROM node:alpine
+# Ensure the environment variable is available during build
+ARG REACT_APP_API_URL
+ENV REACT_APP_API_URL=${REACT_APP_API_URL:-http://localhost:8000/api}
 
-# Install a static file server (like "serve") globally
-RUN npm install -g serve
+# Create production build
+RUN npm run build
 
-# Copy the build folder from the previous stage
-COPY --from=build /app/build /app/build
+# Production environment
+FROM nginx:alpine
 
-RUN ls -la /app/build
+# Copy custom nginx config
+COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
-# Expose port 3000 to allow traffic
+# Copy built files from builder stage
+COPY --from=builder /app/build /usr/share/nginx/html
+
 EXPOSE 3000
 
-# Serve the application with the "serve" command
-CMD ["serve", "-s", "/app/build", "-l", "3000"]
+CMD ["nginx", "-g", "daemon off;"]

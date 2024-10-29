@@ -1,27 +1,40 @@
-# Use the official Python image
-FROM python:3.10
+# HVM_Backend/Dockerfile
+FROM python:3.10-slim
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# Set the working directory
+# Set working directory
 WORKDIR /app
 
-# Install dependencies
-COPY requirements.txt /app/
-RUN pip install --no-cache-dir -r requirements.txt
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    gcc \
+    python3-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-# Copy the project files
-COPY . /app/
+# Install Python dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt requests
 
-# Expose the port
+# Create directory for SQLite database
+RUN mkdir -p /app/db
+
+# Copy project files
+COPY . .
+
+# Move SQLite database to persistent volume location
+RUN if [ -f db.sqlite3 ]; then mv db.sqlite3 /app/db/; fi
+
+# Create static directory
+RUN mkdir -p /app/static
+
+# Copy and set up entrypoint script
+COPY entrypoint.sh .
+RUN chmod +x entrypoint.sh
+
 EXPOSE 8000
 
-# Set default environment variables for creating the superuser
-ENV DJANGO_SUPERUSER_USERNAME=admin
-ENV DJANGO_SUPERUSER_PASSWORD=admin
-ENV DJANGO_SUPERUSER_EMAIL=admin@example.com
-
-# Run migrations and create a superuser before starting the application
-CMD ["sh", "-c", "python manage.py migrate && python manage.py createsuperuser --no-input --username $DJANGO_SUPERUSER_USERNAME --email $DJANGO_SUPERUSER_EMAIL || true && python manage.py runserver 0.0.0.0:8000"]
+# Run entrypoint script
+ENTRYPOINT ["/app/entrypoint.sh"]
