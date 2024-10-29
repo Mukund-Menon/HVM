@@ -1,6 +1,7 @@
 import uuid, datetime
 from django.db import models
 from django.contrib.auth.models import User 
+from django.utils import timezone
     
 class Receiver(models.Model):
     username = models.CharField(max_length=200)
@@ -30,6 +31,8 @@ class LeadVisitor(models.Model):
     def save(self, *args, **kwargs):
         if self.visiting_time:
             self.valid_till = datetime.datetime.combine(datetime.date.today(), self.visiting_time) + datetime.timedelta(hours=6)
+        if self.valid_till and timezone.is_naive(self.valid_till):
+            self.valid_till = timezone.make_aware(self.valid_till)
         super().save(*args, **kwargs)
 
     def __str__(self):
