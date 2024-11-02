@@ -32,6 +32,6 @@ sudo docker run hello-world
 ## Deploying Frontend and backend
 
 ```
-git clone https://github.com/Wreck-X/HVM && cd hvm && docker compose up --build
+git clone https://github.com/Wreck-X/HVM && cd HVM && docker compose up --build
 ```
 
