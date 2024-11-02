@@ -37,3 +37,8 @@ git clone https://github.com/Wreck-X/HVM && cd HVM && docker compose up --build
 
 * Frontend will be deployed at **localhost:3000**
 * Backend will be deployed at **localhost:8000**
+
+## Credentials
+`docker-compose.yml` contains variables for `DJANGO_SUPERUSER_USERNAME`,`DJANGO_SUPERUSER_PASSWORD` and `DJANGO_SUPERUSER_EMAIL=admin@example.com`, Which allow for modification for login credentials
+
+**By default Username - admin, Password - admin.**
