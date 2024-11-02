@@ -35,3 +35,5 @@ sudo docker run hello-world
 git clone https://github.com/Wreck-X/HVM && cd HVM && docker compose up --build
 ```
 
+* Frontend will be deployed at **localhost:3000**
+* Backend will be deployed at **localhost:8000**
