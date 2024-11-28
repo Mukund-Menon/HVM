@@ -17,7 +17,7 @@ services:
       - DJANGO_SUPERUSER_EMAIL=admin@example.com
       - SECRET_KEY=django-insecure-z#blp2ycxz*#5sk$8g8l-8)#0^k2jnprx!0f#%@y_wu6utkl)@
       - DEBUG=1
-      - ALLOWED_HOSTS=localhost,127.0.0.1
+      - ALLOWED_HOSTS=${BACKEND_HOSTS}
     healthcheck:
       test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/admin/')"]
       interval: 10s
