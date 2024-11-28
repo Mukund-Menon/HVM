@@ -40,7 +40,7 @@
           </div>
         </div>
         <div className="w-full p-4 grid grid-cols-2 gap-4 text-start font-semibold text-lg">
-          <div className="text-start font-bold text-lg">
+          <div className="text-start font-bold text-2xl">
             <p className="">Name of visitor</p>
             <p className="">Company Name</p>
             <p className="">Name of Visiting Person</p>
@@ -48,7 +48,7 @@
             <p className="">Valid from</p>
             <p className="">Valid Till</p>
           </div>
-          <div className="text-start font-bold text-lg">
+          <div className="text-start font-bold text-2xl">
             <div>
               <p className="">{fullName}</p>
               <p className="whitespace-normal">{companyName}</p>
