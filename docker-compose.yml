@@ -1,6 +1,3 @@
-# docker-compose.yml
-version: '3.8'
-
 services:
   backend:
     build:
@@ -17,7 +14,7 @@ services:
       - DJANGO_SUPERUSER_EMAIL=admin@example.com
       - SECRET_KEY=django-insecure-z#blp2ycxz*#5sk$8g8l-8)#0^k2jnprx!0f#%@y_wu6utkl)@
       - DEBUG=1
-      - ALLOWED_HOSTS=${BACKEND_HOSTS}
+      - ALLOWED_HOSTS=localhost,127.0.0.1
     healthcheck:
       test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/admin/')"]
       interval: 10s
@@ -31,8 +28,12 @@ services:
     build:
       context: ./HVM-frontend
       dockerfile: Dockerfile
+      args:
+        API_IP: ${API_IP} 
     ports:
       - "3000:3000"
+
+      
     environment:
       - NODE_ENV=production
 

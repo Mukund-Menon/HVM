@@ -13,8 +13,9 @@ RUN npm install --legacy-peer-deps
 COPY . .
 
 # Ensure the environment variable is available during build
-ARG REACT_APP_API_URL
-ENV REACT_APP_API_URL=${REACT_APP_API_URL:-http://localhost:8000/api}
+ARG API_IP
+ENV REACT_APP_API_URL=http://${API_IP:-localhost}:8000/api
+
 
 # Create production build
 RUN npm run build
