@@ -11,7 +11,7 @@ wait_for_db() {
     fi
     
     if [ ! -L /app/db.sqlite3 ]; then
-        ln -sf /app/db/db.sqlite3 /app/db.sqlite3
+        ln -sf /app/db.db.sqlite3 /app/db.sqlite3
     fi
 }
 
@@ -32,6 +32,7 @@ python manage.py createsuperuser --noinput || true
 echo "Collecting static files..."
 python manage.py collectstatic --noinput --clear
 
-# Start server
-echo "Starting Django development server..."
-exec python manage.py runserver 0.0.0.0:8000
+# Start Gunicorn server
+echo "Starting Gunicorn server..."
+gunicorn --bind 0.0.0.0:8000 --keyfile=amrita.edu.key --certfile=amrita.edu.cer --log-level debug backend.wsgi:application
+

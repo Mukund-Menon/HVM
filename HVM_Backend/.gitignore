@@ -3,3 +3,5 @@ hvm/__pycache__/
 db.sqlite3
 hvm/migrations/
 test
+amrita.edu.cer
+amrita.edu.key
