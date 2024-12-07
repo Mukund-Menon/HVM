@@ -27,7 +27,7 @@ FROM nginx:alpine
 COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
 COPY ./ssl/amrita.edu.cer /etc/nginx/ssl/amrita.edu.cer
-COPY ./ssl/amrita.key /etc/nginx/ssl/amrita.edu.key
+COPY ./ssl/amrita.edu.key /etc/nginx/ssl/amrita.edu.key
 
 # Copy built files from builder stage
 COPY --from=builder /app/build /usr/share/nginx/html
