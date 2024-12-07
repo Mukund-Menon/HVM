@@ -31,7 +31,7 @@ services:
       args:
         API_IP: ${API_IP} 
     ports:
-      - "3000:3000"
+      - "443:443"
 
       
     environment:

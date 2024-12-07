@@ -26,8 +26,12 @@ FROM nginx:alpine
 # Copy custom nginx config
 COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
+COPY ./ssl/test.cer /etc/nginx/ssl/test.cer
+COPY ./ssl/test.key /etc/nginx/ssl/test.key
+
 # Copy built files from builder stage
 COPY --from=builder /app/build /usr/share/nginx/html
+
 
 EXPOSE 443
 
