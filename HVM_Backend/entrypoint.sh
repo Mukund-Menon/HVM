@@ -34,5 +34,5 @@ python manage.py collectstatic --noinput --clear
 
 # Start Gunicorn server
 echo "Starting Gunicorn server..."
-gunicorn --bind 0.0.0.0:8000 --keyfile=amrita.edu.key --certfile=amrita.edu.cer --log-level debug backend.wsgi:application
+gunicorn --bind 0.0.0.0:8000 --keyfile=amrita.edu.key --certfile=amrita.edu.cer backend.wsgi:application
 

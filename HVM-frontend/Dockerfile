@@ -14,7 +14,7 @@ COPY . .
 
 # Ensure the environment variable is available during build
 ARG API_IP
-ENV REACT_APP_API_URL=http://${API_IP:-localhost}:8000/api
+ENV REACT_APP_API_URL=https://${API_IP:-localhost}:8000/api
 
 
 # Create production build
