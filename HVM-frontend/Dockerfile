@@ -14,7 +14,7 @@ COPY . .
 
 # Ensure the environment variable is available during build
 ARG API_IP
-ENV REACT_APP_API_URL=https://${API_IP:-localhost}:8000/api
+ENV REACT_APP_API_URL=http://${API_IP:-localhost}:8000/api
 
 
 # Create production build
@@ -26,8 +26,8 @@ FROM nginx:alpine
 # Copy custom nginx config
 COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
-COPY ./ssl/amrita.edu.cer /etc/nginx/ssl/amrita.edu.cer
-COPY ./ssl/amrita.edu.key /etc/nginx/ssl/amrita.edu.key
+COPY ./ssl/test.cer /etc/nginx/ssl/test.cer
+COPY ./ssl/test.key /etc/nginx/ssl/test.key
 
 # Copy built files from builder stage
 COPY --from=builder /app/build /usr/share/nginx/html
