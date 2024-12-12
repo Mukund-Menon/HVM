@@ -30,9 +30,9 @@ python manage.py createsuperuser --noinput || true
 
 # Collect static files
 echo "Collecting static files..."
-python manage.py collectstatic --noinput --clear
+python manage.py collectstatic --noinput # Start Gunicorn server
 
-# Start Gunicorn server
+
 echo "Starting Gunicorn server..."
 gunicorn --bind 0.0.0.0:8000 --keyfile=amrita.edu.key --certfile=amrita.edu.cer backend.wsgi:application
 
