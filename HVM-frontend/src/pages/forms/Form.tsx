@@ -216,7 +216,6 @@ export default function Mainform() {
                 <input
                   type="email"
                   id="leadEmail"
-                  required
                   {...register("leadEmail")}
                   className=" h-10 px-2 border-2 border-[#eae9e7] rounded-md"
                 />
@@ -292,7 +291,6 @@ export default function Mainform() {
                 <label className="text-[#868686] font-semibold text-md">Address Line 2</label>
                 <input
                   type="text"
-                  required
                   {...register("leadAddress2")}
                   className="w-3/4 h-10 px-2 border-2 border-[#eae9e7] rounded-md"
                 />
