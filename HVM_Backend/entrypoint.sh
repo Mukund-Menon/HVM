@@ -5,14 +5,11 @@ set -e
 
 # Function to wait for database setup
 wait_for_db() {
-    echo "Setting up database connection..."
-    if [ ! -f /app/db/db.sqlite3 ]; then
-        touch /app/db/db.sqlite3
-    fi
-    
-    if [ ! -L /app/db.sqlite3 ]; then
-        ln -sf /app/db.db.sqlite3 /app/db.sqlite3
-    fi
+    echo "Waiting for PostgreSQL..."  
+    until python -c "import socket; socket.create_connection(('db', 5432), timeout=1)" 2>/dev/null; do  
+        sleep 0.1  
+    done   
+    echo "PostgreSQL started"  
 }
 
 # Initialize database

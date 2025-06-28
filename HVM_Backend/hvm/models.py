@@ -19,7 +19,7 @@ class LeadVisitor(models.Model):
     address = models.CharField(max_length=200)
     email = models.CharField(max_length=200, null=True, blank=True)
     contact_number = models.CharField(max_length=200)
-    image = models.CharField(max_length=25000000, null=True, blank=True)
+    image = models.CharField(max_length=10000000, null=True, blank=True)
     official_documentation = models.FileField(upload_to='upload/', null=True, blank=True)
     visitee = models.CharField(max_length=200, null=True, blank=True)
     department = models.CharField(max_length=200, null=True, blank=True)
@@ -45,7 +45,7 @@ class Accompanying(models.Model):
     email = models.CharField(max_length=200, null=True, blank=True)
     contact_number = models.CharField(max_length=200)
     unique_id = models.CharField(max_length=36, default=uuid.uuid4)
-    image = models.CharField(max_length=25000000, null=True, blank=True)
+    image = models.CharField(max_length=10000000, null=True, blank=True)
 
     def __str__(self):
         return self.full_name + " | " + self.unique_id

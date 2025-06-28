@@ -5,7 +5,6 @@ services:
       dockerfile: Dockerfile
     volumes:
       - backend_static:/app/static
-      - sqlite_data:/app/db
     ports:
       - "8000:8000"
     environment:
@@ -15,6 +14,11 @@ services:
       - SECRET_KEY=django-insecure-z#blp2ycxz*#5sk$8g8l-8)#0^k2jnprx!0f#%@y_wu6utkl)@
       - DEBUG=1
       - ALLOWED_HOSTS=localhost,127.0.0.1
+      - DB_NAME=hvm_db  
+      - DB_USER=postgres
+      - DB_PASSWORD=admin
+      - DB_HOST=db
+      - DB_PORT=5432
     healthcheck:
       test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/admin/')"]
       interval: 10s
@@ -23,6 +27,8 @@ services:
       start_period: 30s
     networks:
       - hvm_network
+    depends_on:
+      - db
 
   frontend:
     build:
@@ -41,6 +47,19 @@ services:
       - backend
     networks:
       - hvm_network
+  
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: hvm_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - hvm_network
+    ports:
+      - "5432:5432"
 
 networks:
   hvm_network:
@@ -49,3 +68,4 @@ networks:
 volumes:
   backend_static:
   sqlite_data:
+  postgres_data:

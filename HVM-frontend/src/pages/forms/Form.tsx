@@ -37,14 +37,91 @@ export default function Mainform() {
     }
   }, [location.state?.error, message]);
 
-
-  const { register, control, handleSubmit } = leadForm;
+  const { register, control, handleSubmit, setValue, watch } = leadForm;
 
   // Navigation to Printing page
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const onSubmit = async (data: FormValues) => {
+
+  // check if phone number exists in the database
+  const [isCheckingUser, setIsCheckingUser] = useState(false);
+  const [userFound, setUserFound] = useState(false);
+
+  const phoneNumber = watch("leadPhoneNumber");
+
+  const checkUserByPhone = async (phone: string) => {
+    if (!phone || phone.length < 10) return;
     
+    try {
+      setIsCheckingUser(true);
+      const url = `${API}/check-user-by-phone/`;
+      const token = accessToken;
+
+      const response = await axios.get(url, {
+        params: { phone: phone },
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.data.exists) {
+        const userData = response.data.user;
+        
+        setValue("leadFullName", userData.full_name || "");
+        setValue("leadEmail", userData.email || "");
+        setValue("companyName", userData.company_name || "");
+        
+        const addressParts = userData.address ? userData.address.split(", ") : [];
+        setValue("leadAddress1", addressParts[0] || "");
+        setValue("leadAddress2", addressParts[1] || "");
+        
+        if (userData.image) {
+          setImageSrc(userData.image);
+          setValue("leadImage", userData.image);
+        }
+
+        setUserFound(true);
+        toast.success("User found! Details auto-filled pls work pls wplsdp", {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      } else {
+        setUserFound(false);
+      }
+    } catch (error) {
+      console.error("Error checking user:", error);
+      setUserFound(false);
+      toast.error("Error checking user details", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    } finally {
+      setIsCheckingUser(false);
+    }
+  };
+
+  // Handle phone number field blur (when user moves to next field)
+  const handlePhoneBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const phone = e.target.value.trim();
+    if (phone && phone.length >= 10) {
+      checkUserByPhone(phone);
+    }
+  };
+
+  const onSubmit = async (data: FormValues) => {
     try {
       setLoading(true);
 
@@ -231,7 +308,6 @@ export default function Mainform() {
       console.error("Webcam is not available.");
     }
   };
-  
 
   return loading ? <Loader /> : (
     <div className="h-full w-full bg-cover bg-no-repeat bg-center bg-fixed overflow-scroll" style={{ backgroundImage: `url(${bg})` }}>
@@ -266,13 +342,16 @@ export default function Mainform() {
                 />
                 <label className="text-[#868686] font-semibold text-md pt-6 pb-2">
                   Phone Number
+                  {isCheckingUser && <span className="ml-2 text-blue-500 text-sm">Checking..</span>}
+                  {userFound && <span className="ml-2 text-green-500 text-sm">User found</span>}
                 </label>
                 <input
                   type="text"
                   id="leadPhoneNumber"
                   required
                   {...register("leadPhoneNumber")}
-                  className=" h-10 px-2 border-2 border-[#eae9e7] rounded-md"
+                  onBlur={handlePhoneBlur}
+                  className="h-10 px-2 border-2 border-[#eae9e7] rounded-md"
                 />
                 <label className="text-[#868686] font-semibold text-md pt-6 pb-2">Email</label>
                 <input

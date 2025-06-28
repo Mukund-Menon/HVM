@@ -11,10 +11,51 @@ from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth.models import User
-
+from rest_framework.decorators import api_view, permission_classes
 
 def index(request):
     return HttpResponse(f"<p>Hey! I see you're trying to access the API or the admin panel. I suggest you visit the <a href='https://aims.pythonanywhere.com/admin'>/admin</a> or <a href='https://aims.pythonanywhere.com/api'>/api</a> instead.<p>")
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def check_user_by_phone(request):
+
+    phone = request.GET.get('phone')
+    if not phone:
+        return Response({
+            'error': 'Phone number is required'
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
+    try:
+        lead_visitor = LeadVisitor.objects.filter(contact_number=phone).order_by('-id').first()
+        
+        if lead_visitor:
+            user_data = {
+                'full_name': lead_visitor.full_name,
+                'email': lead_visitor.email,
+                'company_name': lead_visitor.company_name,
+                'address': lead_visitor.address,
+                'image': lead_visitor.image,
+                'contact_number': lead_visitor.contact_number,
+            }   
+            return Response({
+                'exists': True,
+                'user': user_data,
+                'message': 'User found with phone number'
+            }, status=status.HTTP_200_OK)
+        else:
+            # User doesn't exist
+            return Response({
+                'exists': False,
+                'message': 'No user found with this phone number'
+            }, status=status.HTTP_200_OK)
+         
+    except Exception as e:
+        return Response({
+            'error': 'An error occurred while checking user details', 'details': str(e)
+        }, 
+        status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
 class MyObtainTokenPairView(TokenObtainPairView):
     permission_classes = (AllowAny,)
     serializer_class = MyTokenObtainPairSerializer
