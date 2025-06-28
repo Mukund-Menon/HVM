@@ -59,7 +59,7 @@ services:
     networks:
       - hvm_network
     ports:
-      - "5432:5432"
+      - "55432:5432"
 
 networks:
   hvm_network:
